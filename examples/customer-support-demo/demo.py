@@ -153,6 +153,7 @@ def main():
             "billing_clarification",
             "time_sensitive",
             "multi_issue",
+            "complex_escalation",
         ],
         help="Run a specific demo scenario",
     )
@@ -174,7 +175,7 @@ def main():
     parser.add_argument(
         "--ticket-index",
         type=int,
-        help="Run specific ticket by index (1-9)",
+        help="Run specific ticket by index (1-10)",
     )
     parser.add_argument(
         "-v", "--verbose",

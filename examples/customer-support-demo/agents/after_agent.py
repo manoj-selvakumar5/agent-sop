@@ -8,6 +8,7 @@ the value of SOPs is in structure/workflow, not tooling.
 
 from pathlib import Path
 from strands import Agent
+from strands.models import BedrockModel
 
 # Import custom tools - SAME as before_agent
 import sys
@@ -33,9 +34,11 @@ def create_after_agent() -> Agent:
     This agent has the same tools as before_agent but uses a structured
     SOP workflow instead of typical prompt.
     """
+    model = BedrockModel(model_id="us.amazon.nova-2-lite-v1:0")
     sop_content = load_sop()
 
     return Agent(
+        model=model,
         system_prompt=sop_content,
         tools=[customer_lookup, categorize_ticket, search_knowledge_base],  # SAME TOOLS
     )

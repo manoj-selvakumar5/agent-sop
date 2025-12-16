@@ -127,6 +127,20 @@
       "product_purchased": "Basic Plan",
       "demo_scenario": "multi_issue",
       "expected_workflow": "Address overcharge, provide receipt, explain cancellation policy"
+    },
+    {
+      "ticket_id": "TKT-2024-010",
+      "customer_id": "CUST-67890",
+      "customer_name": "TechCorp Inc.",
+      "customer_email": "mike.chen@techcorp.example.com",
+      "ticket_type": "complaint",
+      "ticket_subject": "This is ridiculous - need help ASAP",
+      "ticket_description": "I've been trying to reach someone for THREE DAYS about our API integration. We're getting timeout errors and our CEO is presenting to investors TOMORROW and needs the dashboard working. Also I noticed we got charged twice last month ($450 each) and nobody responded to my previous ticket about that either. Our contract says we get priority support but this is the worst experience I've ever had. I need someone to call me back at 555-0123 within the hour or we're switching providers.",
+      "ticket_priority": "critical",
+      "ticket_channel": "email",
+      "product_purchased": "Enterprise API Plan",
+      "demo_scenario": "complex_escalation",
+      "expected_workflow": "Identify all issues (technical, billing, SLA), prioritize by urgency, address callback request"
     }
   ]
 }

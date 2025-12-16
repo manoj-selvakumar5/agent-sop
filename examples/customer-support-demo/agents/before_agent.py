@@ -8,6 +8,7 @@ showing the value of SOPs is in structure/workflow, not tooling.
 
 from pathlib import Path
 from strands import Agent
+from strands.models import BedrockModel
 
 # Import custom tools - SAME as after_agent
 import sys
@@ -18,23 +19,14 @@ from tools.knowledge_base import search_knowledge_base
 
 
 TYPICAL_PROMPT = """
-You are a helpful customer support agent for a SaaS company.
-
-Your job is to help customers with their billing questions and issues.
-Be polite, professional, and try to resolve their problems.
-If you can help them, do so. If you can't, apologize and offer to escalate.
+You are a customer support agent for a SaaS company.
+Help customers with their questions and issues.
+Be professional and helpful.
 
 You have access to these tools:
 - customer_lookup: Look up customer history and account info
 - categorize_ticket: Help classify the ticket type and priority
 - search_knowledge_base: Find relevant solutions and documentation
-
-Remember to:
-- Be friendly and empathetic
-- Help resolve billing issues
-- Offer refunds when appropriate
-- Use the tools to gather information
-- Thank them for being a customer
 """
 
 
@@ -45,7 +37,9 @@ def create_before_agent() -> Agent:
     This agent has the same tools as after_agent but uses a typical
     prompt instead of structured SOP workflow.
     """
+    model = BedrockModel(model_id="us.amazon.nova-2-lite-v1:0")
     return Agent(
+        model=model,
         system_prompt=TYPICAL_PROMPT,
         tools=[customer_lookup, categorize_ticket, search_knowledge_base],  # SAME TOOLS
     )
