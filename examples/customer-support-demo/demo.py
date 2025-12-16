@@ -11,10 +11,12 @@ Usage:
     python demo.py --scenario billing # Run specific scenario
     python demo.py --before-only      # Only run the 'before' agent
     python demo.py --after-only       # Only run the 'after' agent
+    python demo.py -v                 # Show tool inputs (verbose mode)
 """
 
 import argparse
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -64,16 +66,15 @@ def run_comparison(ticket: dict, show_before: bool = True, show_after: bool = Tr
 
     if show_before:
         print_separator("-")
-        print("  BEFORE (Without SOP)")
+        print("  BEFORE (Typical Prompt)")
         print_separator("-")
         print()
 
         try:
-            before_response = handle_ticket_before(
+            handle_ticket_before(
                 ticket_content=ticket["ticket_description"],
                 customer_id=ticket.get("customer_id"),
             )
-            print(before_response)
         except Exception as e:
             print(f"Error running before agent: {e}")
 
@@ -81,17 +82,15 @@ def run_comparison(ticket: dict, show_before: bool = True, show_after: bool = Tr
 
     if show_after:
         print_separator("-")
-        print("  AFTER (With SOP + Tools)")
+        print("  AFTER (With SOP)")
         print_separator("-")
         print()
 
         try:
-            after_response = handle_ticket_after(
+            handle_ticket_after(
                 ticket_content=ticket["ticket_description"],
                 customer_id=ticket.get("customer_id"),
-                interaction_mode="auto",
             )
-            print(after_response)
         except Exception as e:
             print(f"Error running after agent: {e}")
 
@@ -121,7 +120,7 @@ def interactive_menu(tickets: list):
     print()
 
     while True:
-        choice = input("Select scenario (1-8, A, or Q): ").strip().upper()
+        choice = input(f"Select scenario (1-{len(tickets)}, A, or Q): ").strip().upper()
 
         if choice == "Q":
             print("Goodbye!")
@@ -153,6 +152,7 @@ def main():
             "angry_customer",
             "billing_clarification",
             "time_sensitive",
+            "multi_issue",
         ],
         help="Run a specific demo scenario",
     )
@@ -174,10 +174,20 @@ def main():
     parser.add_argument(
         "--ticket-index",
         type=int,
-        help="Run specific ticket by index (1-8)",
+        help="Run specific ticket by index (1-9)",
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Show tool inputs and debug info",
     )
 
     args = parser.parse_args()
+
+    # Configure logging for verbose mode
+    if args.verbose:
+        logging.basicConfig(format="%(message)s", level=logging.WARNING)
+        logging.getLogger("strands.tools.executors").setLevel(logging.DEBUG)
 
     # Load tickets
     tickets = load_sample_tickets()

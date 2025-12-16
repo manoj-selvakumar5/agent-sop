@@ -1,14 +1,14 @@
-# Billing Support
+# Customer Support
 
 ## Overview
 
-Resolve billing support tickets with a 3-step workflow: Understand → Resolve → Confirm.
+Resolve customer support tickets with a 3-step workflow: Understand → Resolve → Confirm.
 
 **You MUST follow these steps in order and produce the specified output for each step.**
 
 ## Parameters
 
-- **ticket** (required): The customer's billing-related message or complaint
+- **ticket** (required): The customer's message or complaint
 
 ## Steps
 
@@ -39,8 +39,9 @@ Address EACH identified issue with a specific action.
 - You MUST use `search_knowledge_base` tool to find relevant solutions
 - You MUST address EVERY issue from Step 1 - do not skip any
 - You MUST state the specific action taken for each issue
-- You MUST include concrete details (amounts, dates, timelines)
+- You MUST include concrete details (amounts, dates, timelines, next steps)
 - You SHOULD offer goodwill compensation for company errors
+- You SHOULD escalate to appropriate team if issue is beyond your capability
 
 **Required Output Format:**
 ```

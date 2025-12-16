@@ -74,13 +74,16 @@ def handle_ticket_before(ticket_content: str, customer_id: str | None = None) ->
 
 
 if __name__ == "__main__":
-    sample_ticket = """
-    hi, so i just checked my bank and you guys charged me $49.99?? im on the basic plan
-    which is supposed to be $29.99. whats going on? also i need a receipt for this for
-    my taxes. and honestly if this keeps happening im probably gonna cancel, do i lose
-    all my stuff if i do that?
-    """
+    import json
+
+    # Load sample ticket from JSON (multi_issue scenario)
+    data_path = Path(__file__).parent.parent / "data" / "sample_tickets.json"
+    with open(data_path) as f:
+        data = json.load(f)
+
+    # Find the multi_issue scenario ticket
+    ticket = next(t for t in data["tickets"] if t["demo_scenario"] == "multi_issue")
 
     print("=== BEFORE Agent Response (typical prompt) ===\n")
-    response = handle_ticket_before(sample_ticket, "CUST-12345")
+    response = handle_ticket_before(ticket["ticket_description"], ticket.get("customer_id"))
     print(response)
