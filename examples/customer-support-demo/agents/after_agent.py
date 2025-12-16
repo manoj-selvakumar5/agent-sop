@@ -65,10 +65,10 @@ def handle_ticket_after(ticket_content: str, customer_id: str | None = None) -> 
 
 if __name__ == "__main__":
     sample_ticket = """
-    Hey, few things:
-    1. I got charged $49.99 but I'm on the $29.99 Basic plan - what happened?
-    2. Can I get a receipt for tax purposes?
-    3. I'm thinking of canceling - what happens to my data?
+    hi, so i just checked my bank and you guys charged me $49.99?? im on the basic plan
+    which is supposed to be $29.99. whats going on? also i need a receipt for this for
+    my taxes. and honestly if this keeps happening im probably gonna cancel, do i lose
+    all my stuff if i do that?
     """
 
     print("=== AFTER Agent Response (with SOP) ===\n")

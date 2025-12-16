@@ -68,27 +68,3 @@ Summarize and verify completeness.
 
 All issues addressed? Please let me know if anything was missed.
 ```
-
-## Example
-
-**Input:**
-```
-I got charged $49.99 but I'm on the $29.99 Basic plan. Also need a receipt for taxes.
-```
-
-**Expected Output:**
-```
-## Issues Identified
-1. Billing discrepancy: Charged $49.99 instead of expected $29.99
-2. Document request: Receipt needed for tax purposes
-
-## Actions Taken
-1. Billing discrepancy: Investigated - found extra $20 was for add-on feature. Refunded $20 + $5 goodwill credit.
-2. Receipt: Generated and emailed tax receipt to your registered email.
-
-## Summary
-- [x] Billing discrepancy: Refunded $20 + $5 credit
-- [x] Tax receipt: Sent to email
-
-All issues addressed? Please let me know if anything was missed!
-```
