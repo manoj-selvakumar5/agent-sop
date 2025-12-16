@@ -1,19 +1,15 @@
 """
 After Agent - Customer support WITH SOP guidance.
 
-This agent demonstrates structured workflow execution using the
-Customer Support Ticket Resolution SOP. It will:
-- Systematically categorize tickets before responding
-- Gather customer context and history
-- Investigate root causes methodically
-- Produce documented artifacts at each step
-- Ensure proper follow-up and closure
+This agent has the SAME TOOLS as before_agent, but uses a structured SOP
+instead of a typical prompt. This creates a fair comparison showing
+the value of SOPs is in structure/workflow, not tooling.
 """
 
 from pathlib import Path
 from strands import Agent
 
-# Import custom tools
+# Import custom tools - SAME as before_agent
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.customer_lookup import customer_lookup
@@ -22,8 +18,8 @@ from tools.knowledge_base import search_knowledge_base
 
 
 def load_sop() -> str:
-    """Load the customer support SOP from the sops directory."""
-    sop_path = Path(__file__).parent.parent / "sops" / "customer-support-ticket.sop.md"
+    """Load the billing support SOP from the sops directory."""
+    sop_path = Path(__file__).parent.parent / "sops" / "billing-support.sop.md"
     if sop_path.exists():
         return sop_path.read_text()
     else:
@@ -32,75 +28,49 @@ def load_sop() -> str:
 
 def create_after_agent() -> Agent:
     """
-    Create a customer support agent with SOP guidance and tools.
+    Create a customer support agent with SOP guidance.
 
-    This agent uses the structured Customer Support Ticket Resolution SOP
-    and has access to tools for looking up customers, categorizing tickets,
-    and searching the knowledge base.
+    This agent has the same tools as before_agent but uses a structured
+    SOP workflow instead of typical prompt.
     """
     sop_content = load_sop()
 
     return Agent(
         system_prompt=sop_content,
-        tools=[customer_lookup, categorize_ticket, search_knowledge_base],
+        tools=[customer_lookup, categorize_ticket, search_knowledge_base],  # SAME TOOLS
     )
 
 
-def handle_ticket_after(
-    ticket_content: str,
-    customer_id: str | None = None,
-    priority_override: str | None = None,
-    interaction_mode: str = "auto",
-) -> str:
+def handle_ticket_after(ticket_content: str, customer_id: str | None = None) -> str:
     """
-    Handle a support ticket using the SOP-guided 'after' agent.
+    Handle a support ticket using the SOP-guided agent.
 
     Args:
         ticket_content: The customer's ticket/message
         customer_id: Optional customer ID for context lookup
-        priority_override: Optional priority override (P1-P4)
-        interaction_mode: "interactive" or "auto" (default: auto for demo)
 
     Returns:
-        The agent's response with full workflow execution
+        The agent's response with structured workflow output
     """
     agent = create_after_agent()
 
-    # Structured prompt following SOP parameter format
-    prompt = f"""Please resolve the following customer support ticket using the SOP workflow.
+    prompt = f"Customer ticket:\n\n{ticket_content}"
 
-## Parameters
-
-- **ticket_content**: {ticket_content}
-- **customer_id**: {customer_id or "Not provided"}
-- **priority_override**: {priority_override or "None - assess during categorization"}
-- **interaction_mode**: {interaction_mode}
-
-Please execute all steps of the Customer Support Ticket Resolution SOP:
-1. Receive and Categorize
-2. Gather Context
-3. Investigate and Diagnose
-4. Resolve or Escalate
-5. Document Resolution
-6. Follow-up and Close
-
-For each step, show the artifact produced."""
+    if customer_id:
+        prompt += f"\n\nCustomer ID: {customer_id}"
 
     result = agent(prompt)
     return result.message
 
 
 if __name__ == "__main__":
-    # Example usage
     sample_ticket = """
-    I was charged twice for my subscription last month. My card shows $29.99
-    on Dec 1 and Dec 15. Can you help?
+    Hey, few things:
+    1. I got charged $49.99 but I'm on the $29.99 Basic plan - what happened?
+    2. Can I get a receipt for tax purposes?
+    3. I'm thinking of canceling - what happens to my data?
     """
 
     print("=== AFTER Agent Response (with SOP) ===\n")
-    response = handle_ticket_after(
-        ticket_content=sample_ticket,
-        customer_id="CUST-12345",
-        interaction_mode="auto",
-    )
+    response = handle_ticket_after(sample_ticket, "CUST-12345")
     print(response)
